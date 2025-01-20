@@ -1,0 +1,13 @@
+---
+- name: fetch, process, and upload cve to s3
+  hosts: localhost
+  gather_facts: false
+  vars_files: vars.yaml
+  tasks:
+  - name: run python script to fetch, process, and upload cve dataset to s3
+    command: python3 ./scripts/fetch_upload_cve.py
+    environment:
+      AWS_REGION: "{{ defaultregion }}"
+      S3_BUCKET_NAME: "{{ bucket_name }}"
+  tags: fetch_cve
+
