@@ -83,7 +83,6 @@ chmod 0600 .env vars.yaml
 **Run Playbook:**
 ```bash
 ansible-playbook setup_infra.yaml -vv
-ansible-playbook gluetable_athena.yaml -vv
 ```
 ```bash
 ansible-playbook fetch_process_cve.yaml -vv
