@@ -77,7 +77,7 @@ chmod 0600 .env vars.yaml
 
 **Run shell script**:
 ```bash
-~/CVEDataLake/scripts/cve_data_pipline.py
+~/CVEDataLake/setup.sh
 ```
 
 **Run Playbook:**
