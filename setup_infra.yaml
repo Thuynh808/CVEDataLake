@@ -85,8 +85,8 @@
       AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
       AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
     loop:
-      - 'python3 ./scripts/cve_data_pipeline..py'
-      - 'python3 ./scripts/gluetable_athena.py'
+      - 'python3 ~/CVEDataLake/scripts/cve_data_pipeline..py'
+      - 'python3 ~/CVEDataLake/scripts/gluetable_athena.py'
   tags: cve_pipeline
 
 - name: setup sns notifications
