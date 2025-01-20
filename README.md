@@ -55,9 +55,9 @@ ansible-galaxy collection install -r requirements.yaml -vv
 
 ## Define Variables
 
-**Update variables with proper values for files: `vars.yaml`**
+**Update variables with proper values for files: `myvars.yaml` and `.env`**
 ```bash
-vim vars.yaml
+vim myvars.yaml
 ```
 ```bash
 accesskeyid: "<your-access-key-id>"
@@ -65,6 +65,14 @@ secretaccesskey: "<your-secret-access-key>"
 defaultregion: "us-east-1"
 emailendpoint: "<your-email>"
 bucketname: "<your-bucket-name>"
+```
+```bash
+vim .env
+```
+```bash
+OPENWEATHER_API_KEY=<your-api-key>
+AWS_BUCKET_NAME=<your-bucket-name>
+AWS_REGION=us-east-1
 ```
 **Set permissions to secure file**
 ```bash
@@ -77,7 +85,11 @@ chmod 0600 .env myvars.yaml
 
 **Run Playbook:**
 ```bash
-ansible-playbook weather_env_s3_sns.yaml -vv
+ansible-playbook setup_infra.yaml -vv
+ansible-playbook gluetable_athena.yaml -vv
+```
+```bash
+ansible-playbook fetch_process_cve.yaml -vv
 ```
   The `weather_env_s3_sns.yaml` playbook will:
   - Install and upgrade system packages
