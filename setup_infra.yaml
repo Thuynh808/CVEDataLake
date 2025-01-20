@@ -39,8 +39,8 @@
     shell: "{{ item }}"
     loop:
       - 'sudo ../aws/install'
-      - 'aws configure set aws_access_key_id {{ accesskeyid }}'
-      - 'aws configure set aws_secret_access_key {{ secretaccesskey }}'
+      - 'aws configure set aws_access_key_id {{ aws_access_key_id }}'
+      - 'aws configure set aws_secret_access_key {{ aws_secret_access_key }}'
       - 'aws configure set default.region {{ defaultregion }}'
     when: aws_cli_check.rc != 0
   tags: env
@@ -73,6 +73,8 @@
       GLUE_DATABASE_NAME: "{{ glue_database_name }}"
       GLUE_TABLE_NAME: "{{ glue_table_name }}"
       ATHENA_OUTPUT_LOCATION: "s3://{{ bucket_name }}/athena-results/"
+      AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+      AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
   tags: gluetable_athena
 
 - name: setup sns notifications

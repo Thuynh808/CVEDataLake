@@ -3,12 +3,8 @@ import json
 import time
 import requests
 import gzip
-from dotenv import load_dotenv
 from datetime import datetime
 import os
-
-# Load environment variables from .env file
-load_dotenv()
 
 # AWS configurations
 region = os.getenv("AWS_REGION")
