@@ -42,7 +42,7 @@ cvedatalake
 ```bash
 cd
 dnf install -y git ansible-core
-git clone https://github.com/Thuynh808/cvedatalake
+git clone -b feature https://github.com/Thuynh808/cvedatalake
 cd CVEDataLake 
 ansible-galaxy collection install -r requirements.yaml -vv
 ```
