@@ -1,7 +1,7 @@
-![Weather-Dashboard-Automation](https://i.imgur.com/9qfpYjc.png)
+![CVEDataLake](https://i.imgur.com/9qfpYjc.png)
 
 ## Project Overview
-Designed for full automation, idempotency, and Infrastructure as Code (IaC), this project ensures consistent, efficient, and reliable operations. It automates daily weather data collection, aggregation, and notifications using AWS services and Ansible. The project fetches weather data for four cities, uploads it to S3, triggers a Lambda function via EventBridge, and sends an aggregated report through SNS.
+cvedatalake 
 
 ## Components
 
@@ -14,12 +14,9 @@ Designed for full automation, idempotency, and Infrastructure as Code (IaC), thi
 - **AWS Services**:
   - **S3**: Stores object weather data
   - **SNS**: Manage notifications through topics and subscribers
-  - **Lambda**: Processes S3 events and publishes reports to SNS
   - **EventBridge**: Using event pattern rule to detect S3 object creation and trigger the Lambda function
   - **IAM**: Manages secure access to AWS services with fine-grained policies and roles
-- **Cron**: Schedules the Python script to run daily for consistent weather data collection
 - **Email**: Delivers weather reports to end users via notifications sent through AWS SNS
-- **OpenWeather API**: Provides real-time weather data for multiple cities
 
 ## Versions
 
@@ -36,8 +33,6 @@ Designed for full automation, idempotency, and Infrastructure as Code (IaC), thi
 - **Rocky Linux VM**
   - Fresh installation of Rocky Linux
   - Allocate sufficient resources: **2 CPUs, 4GB RAM**
-- **OpenWeather API**
-  - A free registered account with provided API key 
 - **AWS Account**
    - An AWS account with provisioned access-key and secret-key
 
@@ -47,8 +42,8 @@ Designed for full automation, idempotency, and Infrastructure as Code (IaC), thi
 ```bash
 cd
 dnf install -y git ansible-core
-git clone https://github.com/Thuynh808/weather-dashboard-automation
-cd weather-dashboard
+git clone https://github.com/Thuynh808/cvedatalake
+cd CVEDataLake 
 ansible-galaxy collection install -r requirements.yaml -vv
 ```
   Command Breakdown:
@@ -60,9 +55,9 @@ ansible-galaxy collection install -r requirements.yaml -vv
 
 ## Define Variables
 
-**Update variables with proper values for files: `myvars.yaml` and `.env`**
+**Update variables with proper values for files: `vars.yaml`**
 ```bash
-vim myvars.yaml
+vim vars.yaml
 ```
 ```bash
 accesskeyid: "<your-access-key-id>"
@@ -71,19 +66,11 @@ defaultregion: "us-east-1"
 emailendpoint: "<your-email>"
 bucketname: "<your-bucket-name>"
 ```
-```bash
-vim .env
-```
-```bash
-OPENWEATHER_API_KEY=<your-api-key>
-AWS_BUCKET_NAME=<your-bucket-name>
-AWS_REGION=us-east-1
-```
-**Set permissions to secure files**
+**Set permissions to secure file**
 ```bash
 chmod 0600 .env myvars.yaml 
 ```
-> Note: Keep these sensitive files local. Add to `.gitignore` if uploading to GitHub
+> Note: Keep  sensitive files local. Add to `.gitignore` if uploading to GitHub
 <br>  
 
 ## Deployment and Testing
