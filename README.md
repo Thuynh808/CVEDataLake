@@ -55,9 +55,9 @@ ansible-galaxy collection install -r requirements.yaml -vv
 
 ## Define Variables
 
-**Update variables with proper values for files: `myvars.yaml` and `.env`**
+**Update variables with proper values for files: `vars.yaml`**
 ```bash
-vim myvars.yaml
+vim vars.yaml
 ```
 ```bash
 accesskeyid: "<your-access-key-id>"
@@ -66,22 +66,19 @@ defaultregion: "us-east-1"
 emailendpoint: "<your-email>"
 bucketname: "<your-bucket-name>"
 ```
-```bash
-vim .env
-```
-```bash
-OPENWEATHER_API_KEY=<your-api-key>
-AWS_BUCKET_NAME=<your-bucket-name>
-AWS_REGION=us-east-1
-```
 **Set permissions to secure file**
 ```bash
-chmod 0600 .env myvars.yaml 
+chmod 0600 .env vars.yaml 
 ```
-> Note: Keep  sensitive files local. Add to `.gitignore` if uploading to GitHub
+> Note: Keep  sensitive file local. Add to `.gitignore` if uploading to GitHub
 <br>  
 
 ## Deployment and Testing
+
+**Run shell script**:
+```bash
+~/CVEDataLake/scripts/cve_data_pipline.py
+```
 
 **Run Playbook:**
 ```bash
