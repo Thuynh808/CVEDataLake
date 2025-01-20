@@ -60,12 +60,22 @@
   gather_facts: false
   vars_files: vars.yaml
   tasks:
+  - name: ensure s3 bucket propagate creation
+    pause:
+      seconds: 7
   - name: create glue database
     command: >
       aws glue create-database
       --database-input '{"Name": "{{ glue_database_name }}", "Description": "Glue database for CVE vulnerability data lake."}'
-  - name: run python script to create glue table and athena workgroup
-    command: python3 ./scripts/gluetable_athena.py
+  tags: glue_database
+
+- name: fetch cve data and configure glue table and athena workgroup
+  hosts: localhost
+  gather_facts: false
+  vars_files: vars.yaml
+  tasks:
+  - name: run scripts to fetch cve data and setup glue-table and athena workgroup
+    command: "{{ item }}"
     environment:
       AWS_REGION: "{{ defaultregion }}"
       S3_BUCKET_NAME: "{{ bucket_name }}"
@@ -74,7 +84,10 @@
       ATHENA_OUTPUT_LOCATION: "s3://{{ bucket_name }}/athena-results/"
       AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
       AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
-  tags: gluetable_athena
+    loop:
+      - 'python3 ./scripts/cve_data_pipeline..py'
+      - 'python3 ./scripts/gluetable_athena.py'
+  tags: cve_pipeline
 
 - name: setup sns notifications
   hosts: localhost
