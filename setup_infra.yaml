@@ -1,0 +1,96 @@
+---
+- name: environment setup
+  hosts: localhost
+  vars_files: vars.yaml
+  tasks:
+  - name: install system packages
+    yum:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - python3
+      - python3-pip
+      - curl
+      - unzip
+  - name: upgrade ansible-core
+    shell: "{{ item }}"
+    loop:
+      - 'python3 -m pip install --upgrade ansible-core'
+  - name: install python dependencies
+    pip:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - boto3==1.28.0
+      - botocore==1.31.0
+      - python-dotenv==1.0.0
+      - requests==2.28.2
+  - name: check if aws cli is installed
+    command: "which aws"
+    register: aws_cli_check
+    ignore_errors: true
+  - name: download and unzip aws-cli
+    unarchive:
+      src: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+      dest: ../
+      remote_src: yes
+    when: aws_cli_check.rc != 0
+  - name: install aws-cli and configure credentials
+    shell: "{{ item }}"
+    loop:
+      - 'sudo ../aws/install'
+      - 'aws configure set aws_access_key_id {{ accesskeyid }}'
+      - 'aws configure set aws_secret_access_key {{ secretaccesskey }}'
+      - 'aws configure set default.region {{ defaultregion }}'
+    when: aws_cli_check.rc != 0
+  tags: env
+
+- name: setup s3 bucket
+  hosts: localhost
+  gather_facts: false
+  vars_files: vars.yaml
+  tasks: 
+  - name: create s3 bucket
+    amazon.aws.s3_bucket:
+      name: "{{ bucket_name }}"
+      state: present
+  tags: s3
+
+- name: setup glue database
+  hosts: localhost
+  gather_facts: false
+  vars_files: vars.yaml
+  tasks:
+  - name: create glue database
+    command: >
+      aws glue create-database
+      --database-input '{"Name": "{{ glue_database_name }}", "Description": "Glue database for CVE vulnerability data lake."}'
+  - name: run python script to create glue table and athena workgroup
+    command: python3 ./scripts/gluetable_athena.py
+    environment:
+      AWS_REGION: "{{ defaultregion }}"
+      S3_BUCKET_NAME: "{{ bucket_name }}"
+      GLUE_DATABASE_NAME: "{{ glue_database_name }}"
+      GLUE_TABLE_NAME: "{{ glue_table_name }}"
+      ATHENA_OUTPUT_LOCATION: "s3://{{ bucket_name }}/athena-results/"
+  tags: gluetable_athena
+
+- name: setup sns notifications
+  hosts: localhost
+  gather_facts: false
+  vars_files: vars.yaml
+  tasks:
+  - name: create alarm sns topic and subscribe email
+    community.aws.sns_topic:
+      name: "CVE-Data-Lake-Reports"
+      state: present
+      display_name: "cve-report"
+      subscriptions:
+        - endpoint: "{{ email_endpoint }}"
+          protocol: "email"
+    register: sns_topic
+  - name: append sns_arn to vars.yaml
+    lineinfile:
+      path: ./vars.yaml
+      line: "sns_arn: \"{{ sns_topic['sns_arn'] }}\""
+  tags: notifications
