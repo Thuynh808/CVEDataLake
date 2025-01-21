@@ -94,22 +94,3 @@
       - 'python3 ~/CVEDataLake/scripts/gluetable_athena.py'
   tags: cve_pipeline
 
-- name: setup sns notifications
-  hosts: localhost
-  gather_facts: false
-  vars_files: vars.yaml
-  tasks:
-  - name: create alarm sns topic and subscribe email
-    community.aws.sns_topic:
-      name: "CVE-Data-Lake-Reports"
-      state: present
-      display_name: "cve-report"
-      subscriptions:
-        - endpoint: "{{ email_endpoint }}"
-          protocol: "email"
-    register: sns_topic
-  - name: append sns_arn to vars.yaml
-    lineinfile:
-      path: ./vars.yaml
-      line: "sns_arn: \"{{ sns_topic['sns_arn'] }}\""
-  tags: notifications

@@ -1,5 +1,6 @@
 venv/
 .env
 __pycache__/
-Collections
+Collections/
 vars.yaml
+query_results/

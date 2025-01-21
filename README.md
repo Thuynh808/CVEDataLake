@@ -81,6 +81,9 @@ chmod 0600 vars.yaml
 ```bash
 ansible-playbook setup_infra.yaml -vv
 ```
+```bash
+ansible-playbook sample-reports.yaml -vv
+```
   The `weather_env_s3_sns.yaml` playbook will:
   - Install and upgrade system packages
   - Install `pip` modules with required versions

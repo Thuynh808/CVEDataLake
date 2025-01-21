@@ -3,20 +3,14 @@
   hosts: localhost
   vars_files:
     - vars.yaml
+    - athena_queries.yaml
   tasks:
     - name: Define Athena queries
       set_fact:
         athena_output_location: "s3://{{ bucket_name }}/athena-results/"
-        queries:
-          - name: "10 Most Recent Vulnerabilities"
-            query: >
-              SELECT cve_id, description, cvss_v3_base_score, published_date
-              FROM "{{ glue_database_name }}.{{ glue_table_name }}"
-              ORDER BY published_date DESC
-              LIMIT 5;
 
     - name: Execute Athena queries and capture execution IDs
-      loop: "{{ queries }}"
+      loop: "{{ athena_queries }}"
       loop_control:
         label: "{{ item.name }}"
       command: >
@@ -33,7 +27,7 @@
         execution_ids: "{{ query_results.results | map(attribute='stdout') | map('regex_search', '\"QueryExecutionId\": \"(.*?)\"', '\\1') | list | flatten }}"
 
     - name: Download CSV files by execution IDs
-      loop: "{{ execution_ids | zip(queries) }}"
+      loop: "{{ execution_ids | zip(athena_queries) }}"
       loop_control:
         label: "{{ item[1].name }}"
       command: >
@@ -44,36 +38,13 @@
       retries: 3
       delay: 10
 
-    - name: Verify downloaded files
-      loop: "{{ execution_ids | zip(queries) }}"
-      loop_control:
-        label: "{{ item[1].name }}"
-      stat:
-        path: "/tmp/{{ item[1].name | replace(' ', '_') }}.csv"
-      register: local_csv_files
-      failed_when: not local_csv_files.stat.exists
-
-    - name: Format CSV files into tables
-      loop: "{{ queries }}"
+    - name: Format CSV files into JSON
+      loop: "{{ athena_queries }}"
       loop_control:
         label: "{{ item.name }}"
-      command: >
+      shell: >
         python3 ./scripts/format-cve.py
         --file /tmp/{{ item.name | replace(' ', '_') }}.csv
         --query-name "{{ item.name }}"
-      register: formatted_output
-      failed_when: formatted_output.rc != 0
-
-    - name: Aggregate formatted tables
-      set_fact:
-        aggregated_table: |
-          {% for result in formatted_output.results %}
-          {{ result.stdout }}
-          {% endfor %}
-    - name: Send formatted report via SNS
-      command: >
-        aws sns publish
-        --topic-arn "{{ sns_arn }}"
-        --message "{{ aggregated_table }}"
-        --subject "CVE Query Results"
-
+      register: json_conversion_results
+      failed_when: json_conversion_results.rc != 0

@@ -1,0 +1,63 @@
+---
+athena_queries:
+  - name: "Top 100 Critical Windows Vulnerabilities"
+    query: >
+      SELECT cve_id, vendor, product, description, cvss_v3_base_score
+      FROM glue_cve_data_lake.cve_records
+      WHERE vendor = 'microsoft'
+      ORDER BY cvss_v3_base_score DESC
+      LIMIT 100;
+  - name: "Top 20 Vendors with Most CVEs"
+    query: >
+      SELECT vendor, COUNT(*) AS total_cves
+      FROM cve_records
+      WHERE vendor IS NOT NULL
+      GROUP BY vendor
+      ORDER BY total_cves DESC
+      LIMIT 20;
+
+  - name: "Top 20 Microsoft Products with Most Vulnerabilities"
+    query: >
+      SELECT product, COUNT(*) AS total_cves
+      FROM cve_records
+      WHERE LOWER(vendor) = 'microsoft'
+      GROUP BY product
+      ORDER BY total_cves DESC
+      LIMIT 20;
+
+  - name: "Top 20 Apple Critical CVEs Apple"
+    query: >
+      SELECT cve_id, product, description, cvss_v3_base_score
+      FROM cve_records
+      WHERE LOWER(vendor) = 'apple' AND cvss_v3_base_score > 9.0;
+
+  - name: "20 Latest Cisco High and Critical CVEs"
+    query: >
+      SELECT cve_id, published_date, product, description, cvss_v3_base_score
+      FROM cve_records
+      WHERE LOWER(vendor) = 'cisco' AND cvss_v3_base_score > 7.0
+      ORDER BY published_date DESC
+      LIMIT 20;
+
+  - name: "Top 10 CVEs with Most References"
+    query: >
+      SELECT cve_id, description, 
+             LENGTH(references) - LENGTH(REPLACE(references, ',', '')) + 1 AS reference_count
+      FROM cve_records
+      WHERE references IS NOT NULL
+      ORDER BY reference_count DESC
+      LIMIT 10;
+
+  - name: "Number of CVEs by Severity Level CVSS v3"
+    query: >
+      SELECT cvss_v3_base_severity, COUNT(*) AS total_cves
+      FROM cve_records
+      WHERE cvss_v3_base_severity IS NOT NULL
+      GROUP BY cvss_v3_base_severity
+      ORDER BY total_cves DESC;
+
+  - name: "List CVEs with SQL Injection"
+    query: >
+      SELECT cve_id, product, vendor, description, cvss_v3_base_score
+      FROM cve_records
+      WHERE LOWER(description) LIKE '%sql injection%';
