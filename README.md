@@ -60,11 +60,13 @@ ansible-galaxy collection install -r requirements.yaml -vv
 vim vars.yaml
 ```
 ```bash
-accesskeyid: "<your-access-key-id>"
-secretaccesskey: "<your-secret-access-key>"
+aws_access_key_id: "<your-access-key-id>"
+aws_secret_access_key: "<your-secret-access-key>"
 defaultregion: "us-east-1"
-emailendpoint: "<your-email>"
-bucketname: "<your-bucket-name>"
+email_endpoint: "<your-email>"
+bucket_name: "<your-bucket-name>"
+glue_database_name: "glue_cve_data_lake"
+glue_table_name: "cve_records"
 ```
 **Set permissions to secure file**
 ```bash
