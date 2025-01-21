@@ -7,7 +7,6 @@ bucket_name = "cve-data-lake-thuynh"
 glue_database_name = "glue_cve_data_lake"
 glue_table_name = "cve_records"
 athena_workgroup_name = "CVEDataLakeWorkgroup"
-sns_topic_name = "CVE-Data-Lake-Reports"
 
 # Create AWS clients
 s3_client = boto3.client("s3", region_name=region)
@@ -69,36 +68,12 @@ def delete_athena_workgroup(workgroup_name):
         print(f"Error deleting Athena workgroup '{workgroup_name}': {e}")
 
 
-def delete_sns_topic(topic_name):
-    """Delete the SNS topic by name."""
-    try:
-        print(f"Finding SNS topic '{topic_name}'...")
-        response = sns_client.list_topics()
-        topic_arn = None
-        for topic in response.get("Topics", []):
-            arn = topic["TopicArn"]
-            if arn.endswith(f":{topic_name}"):
-                topic_arn = arn
-                break
-
-        if not topic_arn:
-            print(f"SNS topic '{topic_name}' not found.")
-            return
-
-        print(f"Deleting SNS topic '{topic_name}' with ARN '{topic_arn}'...")
-        sns_client.delete_topic(TopicArn=topic_arn)
-        print(f"SNS topic '{topic_name}' deleted successfully.")
-    except ClientError as e:
-        print(f"Error deleting SNS topic '{topic_name}': {e}")
-
-
 def main():
     print("Starting cleanup process...")
     delete_s3_bucket(bucket_name)
     delete_glue_table(glue_database_name, glue_table_name)
     delete_glue_database(glue_database_name)
     delete_athena_workgroup(athena_workgroup_name)
-    delete_sns_topic(sns_topic_name)
     print("Cleanup process completed.")
 
 
