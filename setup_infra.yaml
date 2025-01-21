@@ -63,10 +63,15 @@
   - name: ensure s3 bucket propagate creation
     pause:
       seconds: 7
+  - name: check if glue database exists
+    command: aws glue get-database --name "{{ glue_database_name }}"
+    register: glue_db_check
+    ignore_errors: true 
   - name: create glue database
     command: >
       aws glue create-database
       --database-input '{"Name": "{{ glue_database_name }}", "Description": "Glue database for CVE vulnerability data lake."}'
+    when: glue_db_check.rc != 0
   tags: glue_database
 
 - name: fetch cve data and configure glue table and athena workgroup
