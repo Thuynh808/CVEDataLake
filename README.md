@@ -68,24 +68,16 @@ bucketname: "<your-bucket-name>"
 ```
 **Set permissions to secure file**
 ```bash
-chmod 0600 .env vars.yaml 
+chmod 0600 vars.yaml 
 ```
 > Note: Keep  sensitive file local. Add to `.gitignore` if uploading to GitHub
 <br>  
 
 ## Deployment and Testing
 
-**Run shell script**:
-```bash
-~/CVEDataLake/setup.sh
-```
-
 **Run Playbook:**
 ```bash
 ansible-playbook setup_infra.yaml -vv
-```
-```bash
-ansible-playbook fetch_process_cve.yaml -vv
 ```
   The `weather_env_s3_sns.yaml` playbook will:
   - Install and upgrade system packages
