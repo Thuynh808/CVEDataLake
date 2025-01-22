@@ -10,7 +10,6 @@
     loop:
       - python3
       - python3-pip
-      - curl
       - unzip
   - name: upgrade ansible-core
     shell: "{{ item }}"
