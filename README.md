@@ -24,17 +24,14 @@ CVEDataLake's flexibility makes it a valuable tool for Security Operations Cente
 
 ## Versions
 
-| Component        | Version   |
-|-------------------|----------|
-| Rocky Linux       | 9.4      |
-| AWS CLI           | Latest   |
-| Python            | 3.9.21   |
-| Botocore          | 1.31.0   | 
-| Boto3             | 1.28.0   |
-| Requests          | 2.28.2   | 
-| Ansible           | 2.15     |
-| Community.general | 9.0      |
-| Amazon.aws        | 9.0      |
+| Component         | Version  | Component         | Version  |
+|-------------------|----------|-------------------|----------|
+| Rocky Linux       | 9.4      | Python            | 3.9.21   |
+| AWS CLI           | Latest   | Pip               | 21.3.1   |
+| Ansible           | 2.15     | Botocore          | 1.31.0   |
+| Community.general | 9.0      | Boto3             | 1.28.0   |
+| Amazon.aws        | 9.0      | Requests          | 2.28.2   | 
+
  
 
 ## Prerequisites
@@ -90,29 +87,32 @@ chmod 0600 vars.yaml
 ```bash
 ansible-playbook setup_infra.yaml -vv
 ```
-```bash
-ansible-playbook sample-reports.yaml -vv
-```
   The `setup_infra.yaml` playbook will:
   - Install and upgrade system packages
   - Install `pip` modules with required versions
   - Download, unzip and install `AWS CLI`
   - Configure `AWS CLI`
   - Create S3 bucket
-  - Set up a Glue database to organize CVE vulnerability data
-  - Run Python scripts to fetch CVE dataset, configure Glue table, and set up Athena workgroup
+  - Set up a `Glue` database to organize CVE vulnerability data
+  - Run Python scripts to:
+    - Send `GET` requests to the NVD API to fetch the CVE dataset
+    - Upload the data to the `S3` bucket in batches for efficient storage
+    - Create a Glue table and define schemas for structured querying
+    - Set up an `Athena` workgroup for executing SQL queries on the data
 
 **Confirm Successful Execution:**
 ```bash
-rpm -qa curl unzip python3 python3-pip
-pip list | egrep "boto3|botocore|python-dotenv|requests" 
+ansible --version
+python3 --version
+python3-pip --version
+pip list | egrep "boto3|botocore|requests" 
 aws configure list
 aws sts get-caller-identity
 aws s3 ls
-aws s3api head-bucket --bucket "cve-data-lake-thuynh" #Change to your bucket name
+aws s3 ls s3://cve-data-lake-thuynh/ #Change to your bucket name
 aws glue get-database --name glue_cve_data_lake
-aws glue get-tables --database-name glue_cve_data_lake
-aws athena list-work-groups
+aws glue get-tables --database-name glue_cve_data_lake | head
+aws athena list-work-groups | head
 ```
 ```bash
 aws athena start-query-execution \
@@ -135,7 +135,9 @@ aws athena start-query-execution \
   </details>
 
 ---
-
+```bash
+ansible-playbook sample-reports.yaml -vv
+```
 ### Now we need to log in to email account and confirm subscription
 
 <details close>
