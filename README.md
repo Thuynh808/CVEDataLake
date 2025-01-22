@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-CVEDataLake is a cloud-based project that automates the storage, organization, and querying of NVD's Common Vulnerabilities and Exposures (CVE) dataset using AWS services and Infrastructure as Code (IaC) with Ansible. 
+CVEDataLake is a cloud-based project that automates the ingestion, storage, and querying of the Common Vulnerabilities and Exposures (CVE) dataset. It uses AWS services like S3, Glue, and Athena, along with Infrastructure as Code (IaC) through Ansible, to streamline deployment and enable efficient data analysis.
 
 ## Components
 
@@ -15,7 +15,7 @@ CVEDataLake is a cloud-based project that automates the storage, organization, a
 
 ## Use Case
 
-CVEDataLake flexibility makes it a valuable tool for Security Operations Centers (SOCs) and vulnerability management workflows. The JSON files generated from SQL queries can be used for various purposes, such as:
+CVEDataLake's flexibility makes it a valuable tool for Security Operations Centers (SOCs) and vulnerability management workflows. The JSON files generated from SQL queries can be used for various purposes, such as:
 
 - **Trend Analysis**: Identify patterns in vulnerabilities over time to prioritize mitigation.
 - **Integration**: Incorporate JSON data into dashboards or visualization tools.
@@ -109,8 +109,18 @@ pip list | egrep "boto3|botocore|python-dotenv|requests"
 aws configure list
 aws sts get-caller-identity
 aws s3 ls
-aws sns list-topics
+aws s3api head-bucket --bucket "cve-data-lake-thuynh" #Change to your bucket name
+aws glue get-database --name glue_cve_data_lake
+aws glue get-tables --database-name glue_cve_data_lake
+aws athena list-work-groups
 ```
+```bash
+aws athena start-query-execution \
+    --query-string "SELECT * FROM cve_records LIMIT 5;" \
+    --query-execution-context Database=glue_cve_data_lake \
+    --result-configuration OutputLocation="s3://cve-data-lake-thuynh/athena-results/"
+```
+
 <details close>
   <summary> <h4>Image Results</h4> </summary>
     
