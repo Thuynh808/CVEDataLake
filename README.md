@@ -31,10 +31,11 @@ CVEDataLake flexibility makes it a valuable tool for Security Operations Centers
 | Python            | 3.9.21   |
 | Botocore          | 1.31.0   | 
 | Boto3             | 1.28.0   |
+| Requests          | 2.28.2   | 
 | Ansible           | 2.15     |
 | Community.general | 9.0      |
 | Amazon.aws        | 9.0      |
-| Requests          | 2.28.2   |  
+ 
 
 ## Prerequisites
 
