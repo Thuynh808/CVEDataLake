@@ -134,10 +134,10 @@ aws athena list-work-groups | head
 ansible-playbook sample-reports.yaml -vv
 ```
   The `sample-reports.yaml` playbook will:
-  - Define `Athena` queries to extract insights from the CVE data stored in the data lake.
-  - Execute the queries in `Athena` and capture the corresponding execution IDs.
-  - Download the resulting CSV files from the `S3` bucket using the captured execution IDs.
-  - Process and format the CSV files into JSON using a Python script for improved readability and usability.
+  - Define `Athena` queries to extract insights from the CVE data stored in the data lake
+  - Execute the queries in `Athena` and capture the corresponding execution IDs
+  - Download the resulting CSV files from the `S3` bucket using the captured execution IDs
+  - Process and format the CSV files into JSON using a Python script for improved readability and usability
 
 > Note: *This playbook automates the process of running predefined queries, fetching their results, and preparing them in JSON format for use in dashboards, reports, or further analysis.*
 
