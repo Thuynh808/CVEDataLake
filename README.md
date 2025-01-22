@@ -69,7 +69,6 @@ vim vars.yaml
 aws_access_key_id: "<your-access-key-id>"
 aws_secret_access_key: "<your-secret-access-key>"
 defaultregion: "us-east-1"
-email_endpoint: "<your-email>"
 bucket_name: "<your-bucket-name>"
 glue_database_name: "glue_cve_data_lake"
 glue_table_name: "cve_records"
