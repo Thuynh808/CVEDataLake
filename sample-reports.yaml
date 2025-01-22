@@ -1,15 +1,15 @@
 ---
-- name: Download, process, and send Athena query results
+- name: download and process athena query results
   hosts: localhost
   vars_files:
     - vars.yaml
     - athena_queries.yaml
   tasks:
-    - name: Define Athena queries
+    - name: define athena queries
       set_fact:
         athena_output_location: "s3://{{ bucket_name }}/athena-results/"
 
-    - name: Execute Athena queries and capture execution IDs
+    - name: execute athena queries and capture execution IDs
       loop: "{{ athena_queries }}"
       loop_control:
         label: "{{ item.name }}"
@@ -22,11 +22,11 @@
       retries: 3
       delay: 10
 
-    - name: Parse and store execution IDs
+    - name: parse and store execution IDs
       set_fact:
         execution_ids: "{{ query_results.results | map(attribute='stdout') | map('regex_search', '\"QueryExecutionId\": \"(.*?)\"', '\\1') | list | flatten }}"
 
-    - name: Download CSV files by execution IDs
+    - name: download CSV files by execution IDs
       loop: "{{ execution_ids | zip(athena_queries) }}"
       loop_control:
         label: "{{ item[1].name }}"
@@ -38,7 +38,7 @@
       retries: 3
       delay: 10
 
-    - name: Format CSV files into JSON
+    - name: format csv files into json
       loop: "{{ athena_queries }}"
       loop_control:
         label: "{{ item.name }}"
