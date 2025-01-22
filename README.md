@@ -128,8 +128,26 @@ aws athena list-work-groups | head
   </details>
 
 ---
+<br>
 
-**Run Sample Query Reports Playbook:**
+## Athena Queries
+
+The `athena_queries.yaml` file contains sample queries designed to extract valuable insights from the CVE data lake. Each query focuses on a specific aspect of vulnerability management, such as critical vulnerabilities, vendor trends, or severity distributions.
+
+**Key highlights**:
+- **Top 100 Critical Windows Vulnerabilities**: Prioritize patching for high-risk Microsoft vulnerabilities
+- **Top 20 Vendors with Most CVEs**: Monitor vendors with the most reported vulnerabilities
+- **Top 20 Microsoft Products with Most Vulnerabilities**: Focus on high-risk Microsoft products
+- **Top 20 Apple Critical CVEs**: Identify severe vulnerabilities in Apple products (CVSS > 9.0)
+- **20 Latest Cisco High and Critical CVEs**: Track recent critical Cisco vulnerabilities
+- **Top 10 CVEs with Most References**: Highlight vulnerabilities with significant community attention
+- **Number of CVEs by Severity Level (CVSS v3)**: Categorize vulnerabilities by severity for better planning
+- **List CVEs with SQL Injection**: Address risks related to SQL injection attacks
+
+**Extending Queries**
+- This file can be easily updated with new queries to meet evolving requirements. Simply modify `athena_queries.yaml`, then run the playbook to generate updated JSON report files, enabling continuous adaptability and insights.
+
+**Now let's run the Sample Query Reports Playbook:**
 ```bash
 ansible-playbook sample-reports.yaml -vv
 ```
@@ -160,30 +178,7 @@ cat ~/CVEDataLake/query_results/Top_100_Critical_Windows_Vulnerabilities.json | 
   </details>
 
 ---
-
-### Excellent! Now for a demo, let's manually test our Weather Dashboard!
-
-**Run:**
-```bash
-python src/weather_data_aggregator.py
-```
-<details close>
-  <summary> <h4>See results</h4> </summary>
-    
-![Weather-Dashboard-Automation](https://i.imgur.com/lHZRlOe.png) 
-
-![Weather-Dashboard-Automation](https://i.imgur.com/ID2DT3y.png)
-
-**Awesome! We can confirm the data is saved to S3 which triggered our workflow to finally deliver the notification to our email!**
-  </details>
-
-## Challenges and Solutions
-
-- Versioning Issue with Lambda ARN: Resolved by dynamically extracting the base ARN without version numbers
-- Policy Propagation Error: Added a "pause" module after creating IAM policies to ensure EventBridge permissions were applied
-- Dynamic Variables in Ansible: Used set_fact and lineinfile modules to dynamically update variable file
-- Conditional Task Execution: Ensured the AWS CLI installation only runs when not already present using "when" conditions
-- S3 Event Configuration Error: Properly enabled EventBridge for S3 bucket events to trigger Lambda
+<br>
 
 ## Conclusion
 
