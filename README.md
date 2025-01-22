@@ -109,7 +109,7 @@ pip list | egrep "boto3|botocore|requests"
 aws configure list
 aws sts get-caller-identity
 aws s3 ls
-aws s3 ls s3://cve-data-lake-thuynh/ #Change to your bucket name
+aws s3 ls s3://cve-data-lake-thuynh/ #Change "cve-data-lake-thuynh" to your bucket name
 aws glue get-database --name glue_cve_data_lake
 aws glue get-tables --database-name glue_cve_data_lake | head
 aws athena list-work-groups | head
@@ -129,45 +129,25 @@ aws athena list-work-groups | head
   </details>
 
 ---
+
+**Run Sample Query Reports Playbook:**
 ```bash
 ansible-playbook sample-reports.yaml -vv
 ```
-### Now we need to log in to email account and confirm subscription
+  The `sample-reports.yaml` playbook will:
+  - Define `Athena` queries to extract insights from the CVE data stored in the data lake.
+  - Execute the queries in `Athena` and capture the corresponding execution IDs.
+  - Download the resulting CSV files from the `S3` bucket using the captured execution IDs.
+  - Process and format the CSV files into JSON using a Python script for improved readability and usability.
 
-<details close>
-  <summary> <h4>Images Results</h4> </summary>
-    
-![Weather-Dashboard-Automation](https://i.imgur.com/nJw3q63.png)
-
-  - **Click and confirm subscription**
-    
-![Weather-Dashboard-Automation](https://i.imgur.com/qaG7Akb.png)
-  </details>
-
----
-
-**Run Final Playbook:**
-```bash
-ansible-playbook weather_lambda_eventbridge.yaml -vv
-```
-  The `weather_lambda_eventbridge.yaml` playbook will:
-  - Create IAM `lambda-execution-role` to provide permissions to execute `Lambda` function
-  - Add IAM execution role ARN variable to myvars.yaml
-  - Generate a custom IAM policy and attach to our `lambda-execution-role`
-  - Compress the `Lambda` python script
-  - Create `Lambda` function from script and attach the IAM role
-  - Append `Lambda` variables to myvars.yaml
-  - Enable `EventBridge` notifications on `S3` bucket
-  - Generate rule in `EventBridge` for newly created objects in `S3`
-  - Set `EventBridge` target to invoke the `Lambda` function when event is triggered
-  - Automate a daily cron job to fetch weather data and upload it to `S3` using a Python script
+> Note: *This playbook automates the process of running predefined queries, fetching their results, and preparing them in JSON format for use in dashboards, reports, or further analysis.*
 
 **Confirm Successful Execution:**
 
 ```bash
-aws lambda list-functions
-aws events list-rules 
-crontab -l
+aws s3 ls s3://cve-data-lake-thuynh/athena-results/cve-data-lake-thuynh/ #Change "cve-data-lake-thuynh" to your bucket name
+ll ~/CVEDataLake/query_results/
+cat ~/CVEDataLake/query_results/Top_20_Vendors_with_Most_CVEs.json
 ```
 <details close>
   <summary> <h4>Image Results</h4> </summary>
