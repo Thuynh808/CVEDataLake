@@ -95,7 +95,7 @@ ansible-playbook setup_infra.yaml -vv
   - Create S3 bucket
   - Set up a `Glue` database to organize CVE vulnerability data
   - Run Python scripts to:
-    - Send `GET` requests to the NVD API to fetch the CVE dataset
+    - Send GET requests to the NVD API to fetch the CVE dataset
     - Upload the data to the `S3` bucket in batches for efficient storage
     - Create a Glue table and define schemas for structured querying
     - Set up an `Athena` workgroup for executing SQL queries on the data
@@ -104,7 +104,7 @@ ansible-playbook setup_infra.yaml -vv
 ```bash
 ansible --version
 python3 --version
-python3-pip --version
+pip --version
 pip list | egrep "boto3|botocore|requests" 
 aws configure list
 aws sts get-caller-identity
@@ -114,17 +114,11 @@ aws glue get-database --name glue_cve_data_lake
 aws glue get-tables --database-name glue_cve_data_lake | head
 aws athena list-work-groups | head
 ```
-```bash
-aws athena start-query-execution \
-    --query-string "SELECT * FROM cve_records LIMIT 5;" \
-    --query-execution-context Database=glue_cve_data_lake \
-    --result-configuration OutputLocation="s3://cve-data-lake-thuynh/athena-results/"
-```
 
 <details close>
   <summary> <h4>Image Results</h4> </summary>
     
-![Weather-Dashboard-Automation](https://i.imgur.com/P7ASLna.png)
+![CVEDataLake](https://i.imgur.com/9qfpYjc.png)
   
   - **System dependencies**: (curl, unzip, python3, python3-pip) are installed
   - **Python libraries**: (boto3, botocore, python-dotenv, requests) are installed with required versions
