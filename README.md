@@ -145,7 +145,7 @@ ansible-playbook sample-reports.yaml -vv
 **Confirm Successful Execution:**
 
 ```bash
-aws s3 ls s3://cve-data-lake-thuynh/athena-results/cve-data-lake-thuynh/ #Change "cve-data-lake-thuynh" to your bucket name
+aws s3 ls s3://cve-data-lake-thuynh/athena-results/ #Change "cve-data-lake-thuynh" to your bucket name
 ll ~/CVEDataLake/query_results/
 cat ~/CVEDataLake/query_results/Top_20_Vendors_with_Most_CVEs.json
 ```
