@@ -7,6 +7,7 @@ athena_queries:
       WHERE vendor = 'microsoft'
       ORDER BY cvss_v3_base_score DESC
       LIMIT 100;
+      
   - name: "Top 20 Vendors with Most CVEs"
     query: >
       SELECT vendor, COUNT(*) AS total_cves
