@@ -1,32 +1,40 @@
 ![CVEDataLake](https://i.imgur.com/9qfpYjc.png)
 
 ## Project Overview
-cvedatalake 
+
+CVEDataLake is a cloud-based project that automates the storage, organization, and querying of NVD's Common Vulnerabilities and Exposures (CVE) dataset using AWS services and Infrastructure as Code (IaC) with Ansible. 
 
 ## Components
 
-- **Rocky Linux VM**: Provides a RHEL-based and stable environment for Ansible and script execution
-- **Ansible**: Automates the deployment of AWS infrastructure and project setup
-- **Python:** Facilitates weather data fetching, aggregation, and automation through custom scripts:
-  - Fetches weather data from the OpenWeather API
-  - Uploads aggregated data to S3
-  - Processes S3 events and sends notifications to SNS
-- **AWS Services**:
-  - **S3**: Stores object weather data
-  - **SNS**: Manage notifications through topics and subscribers
-  - **EventBridge**: Using event pattern rule to detect S3 object creation and trigger the Lambda function
-  - **IAM**: Manages secure access to AWS services with fine-grained policies and roles
-- **Email**: Delivers weather reports to end users via notifications sent through AWS SNS
+- **Rocky Linux**: Provides a stable and secure environment for running the automation and orchestration workflows
+- **S3**: Serves as the storage solution for fetched CVE data from the NVD
+- **AWS Glue**: Used to define schemas and configure Glue tables for organizing and structuring the data
+- **AWS Athena**: Provides SQL querying capabilities to analyze the data and generate JSON reports
+- **Ansible**: Automates the setup of infrastructure and the generation of reports for repeatability and efficiency
+- **Python**: Facilitates data fetching, processing, and integration with AWS services through scripts and libraries
+
+## Use Case
+
+CVEDataLake flexibility makes it a valuable tool for Security Operations Centers (SOCs) and vulnerability management workflows. The JSON files generated from SQL queries can be used for various purposes, such as:
+
+- **Trend Analysis**: Identify patterns in vulnerabilities over time to prioritize mitigation.
+- **Integration**: Incorporate JSON data into dashboards or visualization tools.
+- **Automation**: Feed JSON data into automated security workflows or vulnerability scanners.
+- **Custom Reports**: Generate tailored reports for compliance audits or team-specific needs.
 
 ## Versions
 
-| Component        | Version  | Component     | Version |
-|------------------|----------|---------------|---------|
-| Rocky Linux      | 9.4      | Ansible       | 2.15    |
-| AWS CLI          | Latest   | Community.aws | 9.0     |
-| Python           | 3.9.21   | Amazon.aws    | 9.0     |
-| Botocore         | 1.31.0   | Requests      | 2.28.2  |  
-| Boto3            | 1.28.0   | python-dotenv | 1.0     |
+| Component        | Version   |
+|-------------------|----------|
+| Rocky Linux       | 9.4      |
+| AWS CLI           | Latest   |
+| Python            | 3.9.21   |
+| Botocore          | 1.31.0   | 
+| Boto3             | 1.28.0   |
+| Ansible           | 2.15     |
+| Community.general | 9.0      |
+| Amazon.aws        | 9.0      |
+| Requests          | 2.28.2   |  
 
 ## Prerequisites
 
@@ -55,7 +63,7 @@ ansible-galaxy collection install -r requirements.yaml -vv
 
 ## Define Variables
 
-**Update variables with proper values for files: `vars.yaml`**
+**Update variables with proper values for file: `vars.yaml`**
 ```bash
 vim vars.yaml
 ```
@@ -72,7 +80,7 @@ glue_table_name: "cve_records"
 ```bash
 chmod 0600 vars.yaml 
 ```
-> Note: Keep  sensitive file local. Add to `.gitignore` if uploading to GitHub
+> Note: Keep the sensitive file local. Add to `.gitignore` if uploading to GitHub
 <br>  
 
 ## Deployment and Testing
@@ -84,14 +92,14 @@ ansible-playbook setup_infra.yaml -vv
 ```bash
 ansible-playbook sample-reports.yaml -vv
 ```
-  The `weather_env_s3_sns.yaml` playbook will:
+  The `setup_infra.yaml` playbook will:
   - Install and upgrade system packages
   - Install `pip` modules with required versions
   - Download, unzip and install `AWS CLI`
   - Configure `AWS CLI`
   - Create S3 bucket
-  - Create SNS topic to send notifications to email subscriber
-  - Append SNS Amazon Resource Name (ARN) to `myvars.yaml` file
+  - Set up a Glue database to organize CVE vulnerability data
+  - Run Python scripts to fetch CVE dataset, configure Glue table, and set up Athena workgroup
 
 **Confirm Successful Execution:**
 ```bash
