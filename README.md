@@ -80,7 +80,7 @@ chmod 0600 vars.yaml
 > Note: Keep the sensitive file local. Add to `.gitignore` if uploading to GitHub
 <br>  
 
-## Deployment and Testing
+## Deployment
 
 **Run Playbook:**
 ```bash
@@ -130,7 +130,7 @@ aws athena list-work-groups | head
 ---
 <br>
 
-## Athena Queries
+## Testing Athena Queries
 
 The `athena_queries.yaml` file contains sample queries designed to extract valuable insights from the CVE data lake. Each query focuses on a specific aspect of vulnerability management, such as critical vulnerabilities, vendor trends, or severity distributions.
 
