@@ -130,7 +130,7 @@ aws athena list-work-groups | head
 ---
 <br>
 
-## Testing Athena Queries
+## Athena Queries
 
 The `athena_queries.yaml` file contains sample queries designed to extract valuable insights from the CVE data lake. Each query focuses on a specific aspect of vulnerability management, such as critical vulnerabilities, vendor trends, or severity distributions.
 
