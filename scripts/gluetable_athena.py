@@ -42,25 +42,25 @@ def create_glue_table():
                 "Name": glue_table_name,
                 "StorageDescriptor": {
                     "Columns": [
-                        {"Name": "cve_id", "Type": "string"},  
-                        {"Name": "assigner", "Type": "string"},  
-                        {"Name": "description", "Type": "string"},  
-                        {"Name": "cvss_v3_vector", "Type": "string"},  
-                        {"Name": "cvss_v3_base_score", "Type": "float"},  
-                        {"Name": "cvss_v3_base_severity", "Type": "string"},  
-                        {"Name": "cvss_v2_vector", "Type": "string"},  
-                        {"Name": "cvss_v2_base_score", "Type": "float"},  
-                        {"Name": "cpe_uris", "Type": "string"},  
-                        {"Name": "references", "Type": "string"},  
-                        {"Name": "published_date", "Type": "string"}, 
-                        {"Name": "last_modified_date", "Type": "string"}, 
-                        {"Name": "vendor", "Type": "string"}, 
-                        {"Name": "product", "Type": "string"}, 
-                        {"Name": "vulnerability_type", "Type": "string"}, 
-                        {"Name": "exploitability_score", "Type": "float"}, 
-                        {"Name": "impact_score", "Type": "float"}, 
-                        {"Name": "state", "Type": "string"},  
-                        {"Name": "credits", "Type": "string"}, 
+                        {"Name": "cve_id", "Type": "string"},
+                        {"Name": "assigner", "Type": "string"},
+                        {"Name": "description", "Type": "string"},
+                        {"Name": "cvss_v3_vector", "Type": "string"},
+                        {"Name": "cvss_v3_base_score", "Type": "double"},
+                        {"Name": "cvss_v3_base_severity", "Type": "string"},
+                        {"Name": "cvss_v3_exploitability", "Type": "double"},
+                        {"Name": "cvss_v3_impact", "Type": "double"},
+                        {"Name": "cvss_v2_vector", "Type": "string"},
+                        {"Name": "cvss_v2_base_score", "Type": "double"},
+                        {"Name": "cpe_uris", "Type": "string"},
+                        {"Name": "vendor", "Type": "string"},
+                        {"Name": "product", "Type": "string"},
+                        {"Name": "references", "Type": "string"},
+                        {"Name": "credits", "Type": "string"},
+                        {"Name": "vulnerability_type", "Type": "string"},
+                        {"Name": "state", "Type": "string"},
+                        {"Name": "published_date", "Type": "string"},
+                        {"Name": "last_modified_date", "Type": "string"},
                     ],
                     "Location": f"s3://{bucket_name}/raw-data/",
                     "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
@@ -75,6 +75,7 @@ def create_glue_table():
         print(f"Glue table '{glue_table_name}' created successfully.")
     except Exception as e:
         print(f"Error creating Glue table: {e}")
+
 
 def configure_athena_workgroup():
     """Configure the Athena workgroup with a query result location."""
