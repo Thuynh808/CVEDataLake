@@ -164,7 +164,7 @@ ansible-playbook sample-reports.yaml -vv
 ```bash
 aws s3 ls s3://cve-data-lake-thuynh/athena-results/ #Change "cve-data-lake-thuynh" to your bucket name
 ll ~/CVEDataLake/query_results/
-cat ~/CVEDataLake/query_results/Top_100_Critical_Windows_Vulnerabilities.json | head -20
+cat ~/CVEDataLake/query_results/Top_100_Critical_Windows_Vulnerabilities.json | head -40
 ```
 <details close>
   <summary> <h4>Image Results</h4> </summary>
