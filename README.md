@@ -1,4 +1,4 @@
-![CVEDataLake](https://i.imgur.com/9qfpYjc.png)
+![CVEDataLake](https://i.imgur.com/eaeJcP2) 
 
 ## Project Overview
 
@@ -117,7 +117,8 @@ aws athena list-work-groups | head
 <details close>
   <summary> <h4>Image Results</h4> </summary>
     
-![CVEDataLake](https://i.imgur.com/9qfpYjc.png)
+![CVEDataLake](https://i.imgur.com/TOHj0Kz)
+![CVEDataLake](https://i.imgur.com/PhcouoU)
   
   - **System dependencies**: (curl, unzip, python3, python3-pip) are installed
   - **Python libraries**: (boto3, botocore, python-dotenv, requests) are installed with required versions
@@ -125,6 +126,8 @@ aws athena list-work-groups | head
   - **IAM identity**: is correctly authenticated via AWS CLI, confirming access to the AWS account
   - **S3 bucket**: exists and is accessible through the CLI
   - **SNS topic**: is successfully created, and its ARN matches the expected configuration
+
+![CVEDataLake](https://i.imgur.com/wob1hNt)
   </details>
 
 ---
@@ -169,8 +172,8 @@ cat ~/CVEDataLake/query_results/Top_100_Critical_Windows_Vulnerabilities.json | 
 <details close>
   <summary> <h4>Image Results</h4> </summary>
     
-![Weather-Dashboard-Automation](https://i.imgur.com/90vYwtb.png)
-![Weather-Dashboard-Automation](https://i.imgur.com/ZocVy92.png)
+![CVEDataLake](https://i.imgur.com/idwIvVZ)
+![CVEDataLake](https://i.imgur.com/fWI7OLO)
 
   - **Lambda Function**: Verify function name and ARN are correct; SNS Topic ARN is properly set as environment variable
   - **EventBridge Rule**: Confirm state is `ENABLED` and event pattern is set to trigger when an object is created in S3
