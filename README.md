@@ -1,4 +1,4 @@
-![CVEDataLake](https://i.imgur.com/eaeJcP2) 
+![CVEDataLake](https://i.imgur.com/eaeJcP2.png) 
 
 ## Project Overview
 
@@ -117,17 +117,28 @@ aws athena list-work-groups | head
 <details close>
   <summary> <h4>Image Results</h4> </summary>
     
-![CVEDataLake](https://i.imgur.com/TOHj0Kz)
-![CVEDataLake](https://i.imgur.com/PhcouoU)
+![CVEDataLake](https://i.imgur.com/TOHj0Kz.png)
+![CVEDataLake](https://i.imgur.com/PhcouoU.png)
   
-  - **System dependencies**: (curl, unzip, python3, python3-pip) are installed
-  - **Python libraries**: (boto3, botocore, python-dotenv, requests) are installed with required versions
-  - **AWS CLI**: credentials and region are properly configured
-  - **IAM identity**: is correctly authenticated via AWS CLI, confirming access to the AWS account
-  - **S3 bucket**: exists and is accessible through the CLI
-  - **SNS topic**: is successfully created, and its ARN matches the expected configuration
+**Environment Setup**:
+- Ansible (2.15.13) and Python (3.9.21) are correctly installed.
+- AWS libraries (boto3, botocore, requests) are configured for the project.
 
-![CVEDataLake](https://i.imgur.com/wob1hNt)
+**AWS Configuration**:
+- Credentials and region (us-east-1) are properly set.
+- IAM identity verified with User ID, Account ID, and ARN.
+
+**S3 Bucket**:
+- `cve-data-lake-thuynh` bucket exists with a valid `raw-data/` prefix.
+
+**Glue Database**:
+- Database: `glue_cve_data_lake` with appropriate metadata and permissions.
+- Table: cve_records exists with creation and update timestamps.
+
+**Athena Workgroup**:
+- Workgroup: `CVEDataLakeWorkgroup` is active (ENABLED) and ready for queries.
+
+![CVEDataLake](https://i.imgur.com/wob1hNt.png)
   </details>
 
 ---
@@ -172,8 +183,8 @@ cat ~/CVEDataLake/query_results/Top_100_Critical_Windows_Vulnerabilities.json | 
 <details close>
   <summary> <h4>Image Results</h4> </summary>
     
-![CVEDataLake](https://i.imgur.com/idwIvVZ)
-![CVEDataLake](https://i.imgur.com/fWI7OLO)
+![CVEDataLake](https://i.imgur.com/idwIvVZ.png)
+![CVEDataLake](https://i.imgur.com/fWI7OLO.png)
 
   - **Lambda Function**: Verify function name and ARN are correct; SNS Topic ARN is properly set as environment variable
   - **EventBridge Rule**: Confirm state is `ENABLED` and event pattern is set to trigger when an object is created in S3
