@@ -2,5 +2,4 @@ venv/
 .env
 __pycache__/
 Collections/
-vars.yaml
 query_results/
