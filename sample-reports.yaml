@@ -1,0 +1,50 @@
+---
+- name: download and process athena query results
+  hosts: localhost
+  vars_files:
+    - vars.yaml
+    - athena_queries.yaml
+  tasks:
+    - name: define athena queries
+      set_fact:
+        athena_output_location: "s3://{{ bucket_name }}/athena-results/"
+
+    - name: execute athena queries and capture execution IDs
+      loop: "{{ athena_queries }}"
+      loop_control:
+        label: "{{ item.name }}"
+      command: >
+        aws athena start-query-execution
+        --query-string "{{ item.query }}"
+        --query-execution-context Database={{ glue_database_name }}
+        --result-configuration OutputLocation={{ athena_output_location }}
+      register: query_results
+      retries: 3
+      delay: 10
+
+    - name: parse and store execution IDs
+      set_fact:
+        execution_ids: "{{ query_results.results | map(attribute='stdout') | map('regex_search', '\"QueryExecutionId\": \"(.*?)\"', '\\1') | list | flatten }}"
+
+    - name: download CSV files by execution IDs
+      loop: "{{ execution_ids | zip(athena_queries) }}"
+      loop_control:
+        label: "{{ item[1].name }}"
+      command: >
+        aws s3 cp
+        "{{ athena_output_location }}{{ item[0] }}.csv"
+        "/tmp/{{ item[1].name | replace(' ', '_') }}.csv"
+      register: s3_download_results
+      retries: 3
+      delay: 10
+
+    - name: format csv files into json
+      loop: "{{ athena_queries }}"
+      loop_control:
+        label: "{{ item.name }}"
+      shell: >
+        python3 ./scripts/format-cve.py
+        --file /tmp/{{ item.name | replace(' ', '_') }}.csv
+        --query-name "{{ item.name }}"
+      register: json_conversion_results
+      failed_when: json_conversion_results.rc != 0
