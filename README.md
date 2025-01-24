@@ -48,7 +48,7 @@ CVEDataLake's flexibility makes it a valuable tool for Security Operations Cente
 ```bash
 cd
 dnf install -y git ansible-core
-git clone -b feature https://github.com/Thuynh808/CVEDataLake
+git clone https://github.com/Thuynh808/CVEDataLake
 cd CVEDataLake 
 ansible-galaxy collection install -r requirements.yaml -vv
 ```
