@@ -2,7 +2,7 @@
 athena_queries:
   - name: "Top 100 Critical Windows Vulnerabilities"
     query: >
-      SELECT cve_id, vendor, product, description, cvss_v3_base_score
+      SELECT cve_id, vendor, product, description, cvss_v3_base_score, cvss_v3_vector
       FROM glue_cve_data_lake.cve_records
       WHERE vendor = 'microsoft'
       ORDER BY cvss_v3_base_score DESC
