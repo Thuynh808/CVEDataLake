@@ -17,10 +17,10 @@ CVEDataLake is a cloud-based project that automates the ingestion, storage, and 
 
 CVEDataLake's flexibility makes it a valuable tool for Security Operations Centers (SOCs) and vulnerability management workflows. The JSON files generated from SQL queries can be used for various purposes, such as:
 
-- **Trend Analysis**: Identify patterns in vulnerabilities over time to prioritize mitigation.
-- **Integration**: Incorporate JSON data into dashboards or visualization tools.
-- **Automation**: Feed JSON data into automated security workflows or vulnerability scanners.
-- **Custom Reports**: Generate tailored reports for compliance audits or team-specific needs.
+- **Trend Analysis**: Identify patterns in vulnerabilities over time to prioritize mitigation
+- **Integration**: Incorporate JSON data into dashboards or visualization tools
+- **Automation**: Feed JSON data into automated security workflows or vulnerability scanners
+- **Custom Reports**: Generate tailored reports for compliance audits or team-specific needs
 
 ## Versions
 
@@ -120,25 +120,25 @@ aws athena list-work-groups | head
 ![CVEDataLake](https://i.imgur.com/TOHj0Kz.png)
 ![CVEDataLake](https://i.imgur.com/PhcouoU.png)
   
-**Environment Setup**:
-- Ansible (2.15.13) and Python (3.9.21) are correctly installed.
-- AWS libraries (boto3, botocore, requests) are configured for the project.
-
-**AWS Configuration**:
-- Credentials and region (us-east-1) are properly set.
-- IAM identity verified with User ID, Account ID, and ARN.
-
-**S3 Bucket**:
-- `cve-data-lake-thuynh` bucket exists with a valid `raw-data/` prefix.
-
-**Glue Database**:
-- Database: `glue_cve_data_lake` with appropriate metadata and permissions.
-- Table: cve_records exists with creation and update timestamps.
-
-**Athena Workgroup**:
-- Workgroup: `CVEDataLakeWorkgroup` is active (ENABLED) and ready for queries.
-
+- **Environment Setup**:
+  - Ansible (2.15.13) and Python (3.9.21) are correctly installed
+  - AWS libraries (boto3, botocore, requests) wtih proper versions are configured
+- **AWS Configuration**:
+  - Credentials and region (us-east-1) are properly set
+  - IAM identity verified with User ID, Account ID, and ARN  
+- **S3 Bucket**:
+  - `cve-data-lake-thuynh` bucket exists with a valid `raw-data/` prefix
+- **Glue Database**:
+  - **Database**: `glue_cve_data_lake` with appropriate metadata and permissions
+  - **Table**: cve_records exists with creation and update timestamps
+- **Athena Workgroup**:
+  - **Workgroup**: `CVEDataLakeWorkgroup` is active (ENABLED) and ready for queries
+---
+<br><br>
 ![CVEDataLake](https://i.imgur.com/wob1hNt.png)
+
+**Glue Table Schema**: 
+ - Navigating to the Glue table in the AWS console, we can verify its schema to ensure it aligns with the data structure needed for our queries 
   </details>
 
 ---
@@ -186,9 +186,9 @@ cat ~/CVEDataLake/query_results/Top_100_Critical_Windows_Vulnerabilities.json | 
 ![CVEDataLake](https://i.imgur.com/idwIvVZ.png)
 ![CVEDataLake](https://i.imgur.com/fWI7OLO.png)
 
-  - **Lambda Function**: Verify function name and ARN are correct; SNS Topic ARN is properly set as environment variable
-  - **EventBridge Rule**: Confirm state is `ENABLED` and event pattern is set to trigger when an object is created in S3
-  - **Cron Job**: a daily cron job exists to run the Python script (weather_data_aggregator.py) at the correct time (0 8 * * *)
+  - **List S3**: Bucket contains results under athena-results/, including .csv and .csv.metadata files
+  - **List local directory**: Confirmed `~/CVEDataLake/query_results/` has multiple JSON query result files
+  - **Examine JSON file**: Results confirm properly formatted structured JSON data
   </details>
 
 ---
